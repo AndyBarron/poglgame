@@ -1,18 +1,22 @@
-extern crate piston;
-extern crate graphics;
+extern crate piston as libpiston;
+extern crate graphics as libgraphics;
+extern crate opengl_graphics as libopengl_graphics;
 extern crate sdl2_window;
-extern crate opengl_graphics;
+
+pub use libpiston as piston;
+pub use libgraphics as graphics;
+pub use libopengl_graphics as opengl_graphics;
+
+pub mod game_input;
+pub mod screen;
+
+pub use game_input::{GameInput, ButtonIter};
+pub use screen::Screen;
 
 use piston::window::WindowSettings;
 use piston::event::{Events, UpdateEvent, RenderEvent};
 use sdl2_window::Sdl2Window as PistonWindow;
 use opengl_graphics::{ GlGraphics, OpenGL };
-
-pub mod input;
-pub use input::{InputManager, ButtonIter};
-
-pub mod screen;
-pub use screen::Screen;
 use screen::UpdateResult;
 
 pub fn launch<S: Screen>(start: S, title: &str, w: u32, h: u32) {
@@ -23,7 +27,7 @@ pub fn launch<S: Screen>(start: S, title: &str, w: u32, h: u32) {
         let window = PistonWindow::new(gl, cur_set.pop()
                 .expect("ERROR: cur_set"));
         let mut gfx = GlGraphics::new(gl);
-        let mut im = InputManager::new();
+        let mut im = GameInput::new();
         'events: for e in window.events() {
             im.update(&e);
             let mut result = None;

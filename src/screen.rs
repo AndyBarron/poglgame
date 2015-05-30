@@ -1,8 +1,8 @@
 use piston::window::WindowSettings;
 use piston::event::{UpdateArgs, RenderArgs};
-use super::input::InputManager;
-use opengl_graphics::GlGraphics;
 use graphics::Context;
+use opengl_graphics::GlGraphics;
+use super::game_input::GameInput;
 
 pub enum UpdateResult {
     Done,
@@ -13,7 +13,7 @@ pub enum UpdateResult {
 
 pub trait Screen {
     /* Required */
-    fn update(&mut self, args: &UpdateArgs, im: &InputManager)
+    fn update(&mut self, args: &UpdateArgs, im: &GameInput)
             -> UpdateResult;
     fn draw(&self, args: &RenderArgs, c: Context, gfx: &mut GlGraphics);
     /* Optional */

@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 use std::collections::hash_map::Iter;
-use piston::input::{Input, Button, Motion, Key, MouseButton};
-use piston::event::Event;
 use graphics::math::Vec2d;
+use piston::input::*;
+use piston::event::*;
 
 // TODO maybe make mouse stuff Option<..> for off-screen?
-pub struct InputManager {
+pub struct GameInput {
     // persistent data
     buttons_down: HashMap<Button, bool>,
     mouse_p: Vec2d,
@@ -34,9 +34,9 @@ impl<'a> Iterator for ButtonIter<'a> {
     }
 }
 
-impl Default for InputManager {
+impl Default for GameInput {
     fn default() -> Self {
-        InputManager {
+        GameInput {
             buttons_down: Default::default(),
             mouse_p: [0., 0.,],
             focus: false,
@@ -48,7 +48,7 @@ impl Default for InputManager {
     }
 }
 
-impl InputManager {
+impl GameInput {
     pub fn new() -> Self { Self::default() }
     pub fn update(&mut self, e: &Event) {
         match *e {

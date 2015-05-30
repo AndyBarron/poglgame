@@ -51,7 +51,7 @@ impl TestScreen {
 }
 
 impl Screen for TestScreen {
-    fn update(&mut self, args: &UpdateArgs, im: &InputManager)
+    fn update(&mut self, args: &UpdateArgs, im: &GameInput)
         -> UpdateResult
     {
         if self.age > QUIT_AFTER || im.was_key_pressed(&Key::Escape) { 

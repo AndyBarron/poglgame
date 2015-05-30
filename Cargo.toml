@@ -1,12 +1,12 @@
 [package]
 name = "poglgame"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Andy Barron <AndrewLBarron@gmail.com>"]
 
 description = "Piston OpenGL 2D Game Scaffold"
 repository = "https://github.com/andybarron/poglgame"
 readme = "./README.md"
-keywords = ["piston", "opengl", "game", "graphics", "2d", "scaffold"]
+keywords = ["piston", "opengl", "game", "graphics", "2d"]
 license = "MIT"
 
 [dependencies]
