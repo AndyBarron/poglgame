@@ -1,6 +1,6 @@
 [package]
 name = "poglgame"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Andy Barron <AndrewLBarron@gmail.com>"]
 
 description = "Piston OpenGL 2D Game Scaffold"

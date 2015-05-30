@@ -1,19 +1,15 @@
-extern crate piston;
-extern crate graphics;
-extern crate sdl2_window;
-extern crate opengl_graphics;
 extern crate poglgame;
 
-use piston::event::*;
-use piston::window::WindowSettings;
-use piston::input::{Key, MouseButton};
-use opengl_graphics::GlGraphics;
-use graphics::types::Color;
-use graphics::Context;
+use poglgame::piston::event::*;
+use poglgame::piston::window::WindowSettings;
+use poglgame::piston::input::{Key, MouseButton};
+use poglgame::opengl_graphics::GlGraphics;
+use poglgame::graphics::types::{Color, Vec2d};
+use poglgame::graphics::Context;
 
 use poglgame::launch;
 use poglgame::screen::*;
-use poglgame::input::*;
+use poglgame::game_input::*;
 
 #[test]
 fn launch_test_screen() {
@@ -30,6 +26,7 @@ const COLORS: [Color; 3] = [
 
 pub struct TestScreen {
     color_idx: usize,
+    position: Vec2d,
     rotation: f64, // radians
     age: f64, // seconds
 }
@@ -44,6 +41,7 @@ impl TestScreen {
     fn new(idx: usize, rot: f64) -> Self {
         TestScreen {
             color_idx: idx,
+            position: [0., 0.],
             rotation: rot,
             age: 0.,
         }
@@ -67,18 +65,17 @@ impl Screen for TestScreen {
                     Box::new(TestScreen::new(i, self.rotation)))
         } else {
             self.age += args.dt;
+            self.position = im.mouse_position();
             self.rotation += 2.0 * args.dt;
             UpdateResult::Done
         }
     }
-    fn draw(&self, args: &RenderArgs, c: Context, gl: &mut GlGraphics) {
-        use graphics::*;
+    fn draw(&self, _: &RenderArgs, c: Context, gl: &mut GlGraphics) {
+        use poglgame::graphics::*;
         clear(COLORS[self.color_idx], gl);
         let square = rectangle::square(0.0, 0.0, 50.0);
-        let x = args.width as f64 / 2.;
-        let y = args.height as f64/ 2.;
         let col = COLORS[(self.color_idx + 1) % COLORS.len()];
-        let transform = c.transform.trans(x, y)
+        let transform = c.transform.trans(self.position[0], self.position[1])
                 .rot_rad(self.rotation)
                 .trans(-25.0, -25.0);
         rectangle(col, square, transform, gl);

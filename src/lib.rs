@@ -14,7 +14,7 @@ pub use game_input::{GameInput, ButtonIter};
 pub use screen::Screen;
 
 use piston::window::WindowSettings;
-use piston::event::{Events, UpdateEvent, RenderEvent};
+use piston::event::{Events, UpdateEvent, RenderEvent, UpdateArgs};
 use sdl2_window::Sdl2Window as PistonWindow;
 use opengl_graphics::{ GlGraphics, OpenGL };
 use screen::UpdateResult;
@@ -46,6 +46,7 @@ pub fn launch<S: Screen>(start: S, title: &str, w: u32, h: u32) {
                 UpdateResult::Done => {}
                 UpdateResult::ChangeScreen(boxed) => {
                     screen = boxed;
+                    screen.update(&UpdateArgs{dt: 0.}, &im);
                 }
                 UpdateResult::Quit => {
                     break 'game;
