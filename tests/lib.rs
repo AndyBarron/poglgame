@@ -1,20 +1,26 @@
-extern crate pgl_game;
+extern crate piston;
+extern crate graphics;
+extern crate sdl2_window;
+extern crate opengl_graphics;
+extern crate poglgame;
 
 use piston::event::*;
 use piston::window::WindowSettings;
 use piston::input::{Key, MouseButton};
 use opengl_graphics::GlGraphics;
 use graphics::types::Color;
-use graphics::{Context};
+use graphics::Context;
 
-use pgl_game::launch;
-use pgl_game::screen::*;
-use pgl_game::input::*;
+use poglgame::launch;
+use poglgame::screen::*;
+use poglgame::input::*;
 
 #[test]
 fn launch_test_screen() {
-    launch(TestScreen::default(), 400, 300)
+    launch(TestScreen::default(), "Test Screen", 400, 300)
 }
+
+const QUIT_AFTER: f64 = 3.0;
 
 const COLORS: [Color; 3] = [
     [0.5, 0.0, 0.0, 1.0],
@@ -25,6 +31,7 @@ const COLORS: [Color; 3] = [
 pub struct TestScreen {
     color_idx: usize,
     rotation: f64, // radians
+    age: f64, // seconds
 }
 
 impl Default for TestScreen {
@@ -38,6 +45,7 @@ impl TestScreen {
         TestScreen {
             color_idx: idx,
             rotation: rot,
+            age: 0.,
         }
     }
 }
@@ -46,19 +54,19 @@ impl Screen for TestScreen {
     fn update(&mut self, args: &UpdateArgs, im: &InputManager)
         -> UpdateResult
     {
-        println!("{:?}", im.is_focused());
-        if im.was_key_pressed(&Key::Escape) { 
+        if self.age > QUIT_AFTER || im.was_key_pressed(&Key::Escape) { 
             UpdateResult::Quit
         } else if im.was_key_pressed(&Key::R) {
             UpdateResult::ReloadWindow(WindowSettings::new(
                 "Resized",
                 [300,300]
-            )) // TODO when window resetting works
+            ))
         } else if im.was_mouse_pressed(&MouseButton::Left) {
             let i = (self.color_idx + 1) % COLORS.len();
             UpdateResult::ChangeScreen(
                     Box::new(TestScreen::new(i, self.rotation)))
         } else {
+            self.age += args.dt;
             self.rotation += 2.0 * args.dt;
             UpdateResult::Done
         }

@@ -8,7 +8,7 @@ pub enum UpdateResult {
     Done,
     Quit,
     ChangeScreen(Box<Screen>),
-    ReloadWindow(WindowSettings),
+    ReloadWindow(WindowSettings), // TODO do this better
 }
 
 pub trait Screen {

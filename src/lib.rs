@@ -1,24 +1,21 @@
-#![allow(dead_code)]
 extern crate piston;
 extern crate graphics;
 extern crate sdl2_window;
 extern crate opengl_graphics;
 
-mod input;
-use input::InputManager;
-
-mod screen;
-use screen::{Screen, UpdateResult};
-
-mod testing;
-use testing::TestScreen;
-
 use piston::window::WindowSettings;
-use piston::event::*;
+use piston::event::{Events, UpdateEvent, RenderEvent};
 use sdl2_window::Sdl2Window as PistonWindow;
 use opengl_graphics::{ GlGraphics, OpenGL };
 
-fn launch<S: Screen>(start: S, title: &str, w: u32, h: u32) {
+pub mod input;
+pub use input::{InputManager, ButtonIter};
+
+pub mod screen;
+pub use screen::Screen;
+use screen::UpdateResult;
+
+pub fn launch<S: Screen>(start: S, title: &str, w: u32, h: u32) {
     let gl = OpenGL::_3_2;
     let mut cur_set = vec![WindowSettings::new(title, [w, h])];
     let mut screen: Box<Screen> = Box::new(start);
@@ -49,7 +46,7 @@ fn launch<S: Screen>(start: S, title: &str, w: u32, h: u32) {
                 UpdateResult::Quit => {
                     break 'game;
                 }
-                // TODO how to restart/resize window?
+                // TODO how to properly restart/resize window?
                 UpdateResult::ReloadWindow(new_set) => {
                     cur_set.push(new_set);
                     continue 'game;
