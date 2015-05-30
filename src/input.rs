@@ -2,8 +2,7 @@ use std::collections::HashMap;
 use std::collections::hash_map::Iter;
 use piston::input::{Input, Button, Motion, Key, MouseButton};
 use piston::event::Event;
-use graphics::math::{self, Vec2d};
-use std::iter::Filter;
+use graphics::math::Vec2d;
 
 // TODO maybe make mouse stuff Option<..> for off-screen?
 pub struct InputManager {
@@ -59,8 +58,8 @@ impl InputManager {
     }
     pub fn end_frame(&mut self) {
         // for-loop necessary b/c iter adaptors are lazy ... ugh
-        for _ in self.buttons_pressed.iter_mut().map(|(k, v)| *v = false) {}
-        for _ in self.buttons_released.iter_mut().map(|(k, v)| *v = false) {}
+        for _ in self.buttons_pressed.iter_mut().map(|(_, v)| *v = false) {}
+        for _ in self.buttons_released.iter_mut().map(|(_, v)| *v = false) {}
         self.mouse_d = [0., 0.];
         self.scroll_d = [0., 0.];
     }
@@ -101,9 +100,9 @@ impl InputManager {
     pub fn was_mouse_released(&self, mouse: &MouseButton) -> bool {
         self.was_released(&Button::Mouse(*mouse))
     }
-    // pub fn is_focused(&self) -> bool {
-    //     self.focus // TODO make this work
-    // }
+    pub fn is_focused(&self) -> bool {
+        self.focus // TODO broken
+    }
     pub fn mouse_position(&self) -> Vec2d {
         self.mouse_p
     }
@@ -136,21 +135,19 @@ impl InputManager {
             },
             Input::Move(ref motion) => match *motion {
                 Motion::MouseCursor(x, y) => {
-                    let current = [x, y];
-                    self.mouse_d = math::sub(current, self.mouse_p);
-                    self.mouse_p = current;
+                    self.mouse_p = [x, y];
                 }
                 Motion::MouseScroll(x, y) => {
                     self.scroll_d = [x, y];
                 }
-                // Motion::MouseRelative(x, y) => {
-                //     self.mouse_d = [x, y]; // TODO never called
-                // }
-                _ => {}
+                Motion::MouseRelative(x, y) => {
+                    self.mouse_d = [x, y]; // TODO never called w/ Glutin
+                }
+                // _ => {}
             },
-            // Input::Focus(ref b) => {
-            //     self.focus = *b // TODO doesn't work
-            // }
+            Input::Focus(ref b) => {
+                self.focus = *b // TODO doesn't work w/ Glutin
+            }
             _ => {}
         }
     }

@@ -1,8 +1,8 @@
-use piston::window::{Window, WindowSettings};
-use piston::event::{Event, UpdateArgs, RenderArgs};
+use piston::window::WindowSettings;
+use piston::event::{UpdateArgs, RenderArgs};
 use super::input::InputManager;
 use opengl_graphics::GlGraphics;
-use graphics::{ Context, Graphics };
+use graphics::Context;
 
 pub enum UpdateResult {
     Done,
@@ -11,7 +11,6 @@ pub enum UpdateResult {
     ReloadWindow(WindowSettings),
 }
 
-// TODO how to manage screen resizing, video modes?
 pub trait Screen {
     /* Required */
     fn update(&mut self, args: &UpdateArgs, im: &InputManager)
