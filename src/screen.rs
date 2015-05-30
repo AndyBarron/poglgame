@@ -1,19 +1,22 @@
-use piston::window::Window;
+use piston::window::{Window, WindowSettings};
 use piston::event::{Event, UpdateArgs, RenderArgs};
 use super::input::InputManager;
 use opengl_graphics::GlGraphics;
+use graphics::{ Context, Graphics };
 
 pub enum UpdateResult {
     Done,
-    ChangeScreen(Box<Screen>),
     Quit,
+    ChangeScreen(Box<Screen>),
+    ReloadWindow(WindowSettings),
 }
 
 // TODO how to manage screen resizing, video modes?
 pub trait Screen {
+    /* Required */
     fn update(&mut self, args: &UpdateArgs, im: &InputManager)
             -> UpdateResult;
-    fn draw(&self, args: &RenderArgs, gl: &mut GlGraphics);
-    #[allow(unused_variables)]
-    fn on_event(&mut self, e: &Event) {}
+    fn draw(&self, args: &RenderArgs, c: Context, gfx: &mut GlGraphics);
+    /* Optional */
+    fn on_exit(&self) {}
 }
