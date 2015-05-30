@@ -3,12 +3,17 @@ name = "poglgame"
 version = "0.1.0"
 authors = ["Andy Barron <AndrewLBarron@gmail.com>"]
 
-[dependencies]
-piston = "*"
-piston2d-graphics = "*"
-piston2d-opengl_graphics = "*"
-piston2d-sprite = "*"
+description = "Piston OpenGL 2D Game Scaffold"
+repository = "https://github.com/andybarron/poglgame"
+readme = "./README.md"
+keywords = ["piston", "opengl", "game", "graphics", "2d", "scaffold"]
+license = "MIT"
 
-pistoncore-sdl2_window = "*"
+[dependencies]
+piston = "^0.1.4"
+piston2d-graphics = "^0.1.4"
+piston2d-opengl_graphics = "^0.1.0"
+
+pistoncore-sdl2_window = "^0.1.0"
 # switch to glutin_window when relative mouse motion,
 #   window focus, and window restart work

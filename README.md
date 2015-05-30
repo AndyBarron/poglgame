@@ -1,4 +1,5 @@
-# Piston OpenGL Game Scaffold
+# Piston OpenGL 2D Game Scaffold
+*Pronunciation of `poglgame` = "pogle-game" with a long O*
 
 For personal use. More info soon!
 
