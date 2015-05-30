@@ -18,10 +18,6 @@ use piston::event::*;
 use sdl2_window::Sdl2Window as PistonWindow;
 use opengl_graphics::{ GlGraphics, OpenGL };
 
-fn main() {
-    launch(TestScreen::default(), "Test", 400, 300)
-}
-
 fn launch<S: Screen>(start: S, title: &str, w: u32, h: u32) {
     let gl = OpenGL::_3_2;
     let mut cur_set = vec![WindowSettings::new(title, [w, h])];

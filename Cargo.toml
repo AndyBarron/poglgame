@@ -1,5 +1,5 @@
 [package]
-name = "piston-test"
+name = "pgl_game"
 version = "0.1.0"
 authors = ["Andy Barron <AndrewLBarron@gmail.com>"]
 
