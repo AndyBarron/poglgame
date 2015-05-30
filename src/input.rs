@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::collections::hash_map::Iter;
-use piston::input::{Input, Button, Motion};
+use piston::input::{Input, Button, Motion, Key, MouseButton};
 use piston::event::Event;
 use graphics::math::{self, Vec2d};
 use std::iter::Filter;
@@ -12,7 +12,7 @@ pub struct InputManager {
     mouse_p: Vec2d,
     focus: bool,
     // data that resets per frame
-    buttons_pressed: HashMap<Button, bool>,
+    pub buttons_pressed: HashMap<Button, bool>,
     buttons_released: HashMap<Button, bool>,
     mouse_d: Vec2d,
     scroll_d: Vec2d,
@@ -58,8 +58,9 @@ impl InputManager {
         }
     }
     pub fn end_frame(&mut self) {
-        self.buttons_pressed.clear();
-        self.buttons_released.clear();
+        // for-loop necessary b/c iter adaptors are lazy ... ugh
+        for _ in self.buttons_pressed.iter_mut().map(|(k, v)| *v = false) {}
+        for _ in self.buttons_released.iter_mut().map(|(k, v)| *v = false) {}
         self.mouse_d = [0., 0.];
         self.scroll_d = [0., 0.];
     }
@@ -81,6 +82,24 @@ impl InputManager {
             Some(b) => *b,
             None => false,
         }
+    }
+    pub fn is_key_down(&self, key: &Key) -> bool {
+        self.is_down(&Button::Keyboard(*key))
+    }
+    pub fn was_key_pressed(&self, key: &Key) -> bool {
+        self.was_pressed(&Button::Keyboard(*key))
+    }
+    pub fn was_key_released(&self, key: &Key) -> bool {
+        self.was_released(&Button::Keyboard(*key))
+    }
+    pub fn is_mouse_down(&self, mouse: &MouseButton) -> bool {
+        self.is_down(&Button::Mouse(*mouse))
+    }
+    pub fn was_mouse_pressed(&self, mouse: &MouseButton) -> bool {
+        self.was_pressed(&Button::Mouse(*mouse))
+    }
+    pub fn was_mouse_released(&self, mouse: &MouseButton) -> bool {
+        self.was_released(&Button::Mouse(*mouse))
     }
     // pub fn is_focused(&self) -> bool {
     //     self.focus // TODO make this work

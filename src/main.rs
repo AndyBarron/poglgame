@@ -13,42 +13,39 @@ use screen::{Screen, UpdateResult};
 
 use piston::window::{Window, WindowSettings, AdvancedWindow};
 use piston::event::*;
-use piston::input::{Key, MouseButton};
+use piston::input::{Key, MouseButton, Button};
 use glutin_window::GlutinWindow;
 use opengl_graphics::{ GlGraphics, OpenGL };
 use graphics::types::Color;
+use graphics::{Context};
 
 fn main() {
-    // launch(TestScreen, 400, 300)
-    old_main()
+    launch(TestScreen::default(), "Test", 400, 300)
+    // old_main()
 }
 
-fn easy_launch<S: Screen>(start: S, title: &str, w: u32, h: u32) {
-    launch( start, WindowSettings::new(title, [w, h]) )
-}
-
-fn launch<S: Screen>(start: S, settings: WindowSettings) {
+fn launch<S: Screen>(start: S, title: &str, w: u32, h: u32) {
     let gl = OpenGL::_3_2;
-    let mut gfx = GlGraphics::new(gl);
+    let mut cur_set = vec![WindowSettings::new(title, [w, h])];
     let mut screen: Box<Screen> = Box::new(start);
-    let mut cur_set = vec![settings];
-
     'game: loop {
         let mut window = GlutinWindow::new(gl, cur_set.pop()
                 .expect("ERROR: cur_set"));
+        let mut gfx = GlGraphics::new(gl);
         let mut im = InputManager::new();
         'events: for e in window.events() {
             im.update(&e);
             let mut result = None;
+
             if let Some(args) = e.update_args() {
                 result = Some(screen.update(&args, &im));
+                im.end_frame();
             }
             if let Some(args) = e.render_args() {
                 gfx.draw(args.viewport(), |c, gfx| {
                     screen.draw(&args, c, gfx);
                 });
             }
-            im.end_frame();
             if result.is_none() { continue; }
             match result.unwrap() {
                 UpdateResult::Done => {}
@@ -60,27 +57,62 @@ fn launch<S: Screen>(start: S, settings: WindowSettings) {
                 }
                 UpdateResult::ReloadWindow(new_set) => {
                     cur_set.push(new_set);
-                    break 'events;
+                    continue 'game;
                 }
             }
         }
+        // if 'events ends, the window is closed
+        break 'game;
     }
 
     screen.on_exit();
 }
 
-// pub struct TestScreen;
+const COLORS: [Color; 3] = [
+    [0.5, 0.0, 0.0, 1.0],
+    [0.0, 0.5, 0.0, 1.0],
+    [0.0, 0.0, 0.5, 1.0],
+];
 
-// impl Screen for TestScreen {
-//     fn update(&mut self, args: &UpdateArgs, im: &InputManager)
-//             -> UpdateResult
-//     {
-//         UpdateResult::Done
-//     }
-//     fn draw(&self, args: &RenderArgs, gl: &mut GlGraphics) {
+pub struct TestScreen {
+    color_idx: usize,
+    rotation: f64, // radians
+}
 
-//     }
-// }
+impl Default for TestScreen {
+    fn default() -> Self {
+        Self::new(0)
+    }
+}
+
+impl TestScreen {
+    fn new(idx: usize) -> Self {
+        TestScreen {
+            color_idx: idx,
+            rotation: 0.,
+        }
+    }
+}
+
+impl Screen for TestScreen {
+    fn update(&mut self, args: &UpdateArgs, im: &InputManager)
+        -> UpdateResult
+    {
+        if im.was_key_pressed(&Key::Escape) { 
+            UpdateResult::Quit
+        } else if im.was_mouse_pressed(&MouseButton::Left) {
+            let i = (self.color_idx + 1) % COLORS.len();
+            UpdateResult::ChangeScreen(Box::new(TestScreen::new(i)))
+        } else {
+            self.rotation += 2.0 * args.dt;
+            UpdateResult::Done
+        }
+    }
+    fn draw(&self, args: &RenderArgs, c: Context, gl: &mut GlGraphics) {
+        use graphics::*;
+        clear(COLORS[self.color_idx], gl);
+    }
+}
 
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
