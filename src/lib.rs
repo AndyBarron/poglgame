@@ -1,11 +1,15 @@
 extern crate piston as libpiston;
 extern crate graphics as libgraphics;
 extern crate opengl_graphics as libopengl_graphics;
+extern crate sprite as libsprite;
+extern crate ai_behavior as libai_behavior;
 extern crate sdl2_window;
 
 pub use libpiston as piston;
 pub use libgraphics as graphics;
 pub use libopengl_graphics as opengl_graphics;
+pub use libsprite as sprite;
+pub use libai_behavior as ai_behavior;
 
 pub mod game_input;
 pub mod screen;
