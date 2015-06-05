@@ -70,7 +70,7 @@ impl Screen for TestScreen {
             UpdateResult::Done
         }
     }
-    fn draw(&self, _: &RenderArgs, c: Context, gl: &mut GlGraphics) {
+    fn draw(&mut self, _: &RenderArgs, c: Context, gl: &mut GlGraphics) {
         use poglgame::graphics::*;
         clear(COLORS[self.color_idx], gl);
         let square = rectangle::square(0.0, 0.0, 50.0);

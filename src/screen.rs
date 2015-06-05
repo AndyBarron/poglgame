@@ -15,7 +15,7 @@ pub trait Screen {
     /* Required */
     fn update(&mut self, args: &UpdateArgs, im: &GameInput)
             -> UpdateResult;
-    fn draw(&self, args: &RenderArgs, c: Context, gfx: &mut GlGraphics);
+    fn draw(&mut self, args: &RenderArgs, c: Context, gfx: &mut GlGraphics);
     /* Optional */
     fn on_exit(&self) {}
 }
