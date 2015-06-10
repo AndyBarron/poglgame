@@ -1,6 +1,6 @@
 [package]
 name = "poglgame"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Andy Barron <AndrewLBarron@gmail.com>"]
 
 description = "Piston OpenGL 2D Game Scaffold"
@@ -18,4 +18,4 @@ piston-ai_behavior = "^0.1.0"
 
 pistoncore-sdl2_window = "^0.1.0"
 # switch to glutin_window when relative mouse motion,
-#   window focus, and window restart work
+#   window focus, and window restart work!

@@ -11,7 +11,7 @@ pub struct GameInput {
     mouse_p: Vec2d,
     focus: bool,
     // data that resets per frame
-    pub buttons_pressed: HashMap<Button, bool>,
+    buttons_pressed: HashMap<Button, bool>,
     buttons_released: HashMap<Button, bool>,
     mouse_d: Vec2d,
     scroll_d: Vec2d,

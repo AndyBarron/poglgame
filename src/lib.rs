@@ -1,27 +1,25 @@
-extern crate piston as libpiston;
-extern crate graphics as libgraphics;
-extern crate opengl_graphics as libopengl_graphics;
-extern crate sprite as libsprite;
-extern crate ai_behavior as libai_behavior;
+extern crate piston;
+extern crate graphics;
+extern crate opengl_graphics;
+extern crate sprite;
+extern crate ai_behavior;
 extern crate sdl2_window;
 
-pub use libpiston as piston;
-pub use libgraphics as graphics;
-pub use libopengl_graphics as opengl_graphics;
-pub use libsprite as sprite;
-pub use libai_behavior as ai_behavior;
+pub use piston::*;
+pub use graphics::*;
+pub use opengl_graphics::*;
+pub use sprite::*;
+pub use ai_behavior::*;
 
 pub mod game_input;
 pub mod screen;
 
-pub use game_input::{GameInput, ButtonIter};
-pub use screen::Screen;
+pub use game_input::*;
+pub use screen::*;
 
-use piston::window::WindowSettings;
-use piston::event::{Events, UpdateEvent, RenderEvent, UpdateArgs};
+use window::WindowSettings;
+use event::{Events, UpdateEvent, RenderEvent, UpdateArgs};
 use sdl2_window::Sdl2Window as PistonWindow;
-use opengl_graphics::{ GlGraphics, OpenGL };
-use screen::UpdateResult;
 
 pub fn launch<S: Screen>(start: S, title: &str, w: u32, h: u32) {
     let gl = OpenGL::_3_2;
